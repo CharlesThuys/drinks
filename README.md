@@ -1,4 +1,2 @@
-# drinks
-## Contributers
-- Bryan Van Winnendael
-- Charles Thuysbaert
+- [Bryan Van Winnendael](https://github.com/BryanVanWinnendael)
+- [Charles Thuysbaert](https://github.com/CharlesThuys/)
