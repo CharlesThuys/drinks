@@ -1,6 +1,6 @@
 import { Text, FlatList, View } from "react-native";
 import { useState, useEffect } from "react";
-import {API_URL} from "@env";
+import { fetcher } from "../utils/fetcher";
 
 export default function Index() {
     const [users, setUsers] = useState([]);
@@ -16,8 +16,7 @@ export default function Index() {
     useEffect(() => {
         // Simulating an asynchronous API call
         const getAllUsers = async () => {
-            const response = await fetch(`${API_URL}users`);
-            const data = await response.json();
+            const data = await fetcher("users", "get");
             setUsers(data.users);
         };
     
