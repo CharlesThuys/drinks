@@ -1,8 +1,9 @@
-import { Text, FlatList, View } from "react-native";
+import { ApplicationProvider, Layout, Text } from '@ui-kitten/components';
+import { fetcher } from "../../utils/fetcher";
 import { useState, useEffect } from "react";
-import { fetcher } from "../utils/fetcher";
+import { FlatList, View } from "react-native";
 
-export default function Index() {
+const Home = () => {
     const [users, setUsers] = useState([]);
 
     const renderItem = ({ item }) => {
@@ -25,10 +26,14 @@ export default function Index() {
       }, []);
 
     return (
-        <FlatList
+        <Layout style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <FlatList
             data={users}
             renderItem={renderItem}
             keyExtractor={(item, index) => index.toString()}
-        />
-    );
+            />
+        </Layout>
+    )
 }
+
+export default Home
