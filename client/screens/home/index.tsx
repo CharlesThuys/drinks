@@ -1,7 +1,7 @@
 import { Layout, Text } from '@ui-kitten/components';
-import { fetcher } from '../../utils/fetcher';
+import { fetcher } from '@/utils/fetcher';
 import { useState, useEffect } from 'react';
-import { User } from '../../types/user';
+import { User } from '@/types/user';
 
 const Home = () => {
   const [users, setUsers] = useState<User[]>([]);

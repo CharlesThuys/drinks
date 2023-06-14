@@ -2,7 +2,7 @@ import {
   SimpleLineIcons,
 } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Home, Games, Events } from '../screens';
+import { Home, Games, Events } from '@/screens';
 
 
 const Tab = createBottomTabNavigator();

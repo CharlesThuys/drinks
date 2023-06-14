@@ -1,7 +1,7 @@
 import { Layout, Text } from '@ui-kitten/components';
-import { fetcher } from '../../utils/fetcher';
+import { fetcher } from '@/utils/fetcher';
 import { useState, useEffect } from 'react';
-import { Event } from '../../types/event';
+import { Event } from '@/types/event';
 
 const Events = () => {
   const [events, setEvents] = useState<Event[]>([]);

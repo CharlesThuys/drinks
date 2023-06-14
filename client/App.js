@@ -1,7 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Home from './screens/home';
-import BottomTabNav from './navigation/BottomTabNav';
+import Home from '@/screens/home';
+import BottomTabNav from '@/navigation/BottomTabNav';
 import * as eva from '@eva-design/eva';
 import { ApplicationProvider } from '@ui-kitten/components';
 
