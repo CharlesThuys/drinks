@@ -1,25 +1,48 @@
 import {
-  SimpleLineIcons,
+  Octicons,
+  AntDesign,
+  MaterialCommunityIcons,
 } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Home, Games, Events } from '@/screens';
+import { useTheme, Layout } from '@ui-kitten/components';
 
 
 const Tab = createBottomTabNavigator();
 
 
 const BottomTabNav = () => {
+  const theme = useTheme();
+
   return (
-    <Tab.Navigator>
+    <Tab.Navigator screenOptions={{
+      tabBarStyle: { 
+        borderTopColor: '#21222d',
+        backgroundColor: '#0d0e19',
+        elevation: 0,   // for Android
+        shadowOffset: {
+          width: 0, height: 0, // for iOS
+        },
+        
+      },
+    }}>
         <Tab.Screen
         name='Events'
         component={Events}
         options={{
-          tabBarIcon: () => {
+          headerTitleStyle: { color: 'transparent' },
+          headerBackground: () => {
             return (
-              <SimpleLineIcons
-              name='home'
+              <Layout style={{ flex: 1, backgroundColor: '#0d0e19' }} />
+            );
+          },
+          tabBarShowLabel: false,
+          tabBarIcon: ({ focused }) => {
+            return (
+              <AntDesign 
+              name='calendar'
               size={24}
+              color={focused ? theme['color-primary-500'] : 'white'}
               />
             );
           },
@@ -29,11 +52,19 @@ const BottomTabNav = () => {
         name='Home'
         component={Home}
         options={{
-          tabBarIcon: () => {
+          headerTitleStyle: { color: 'transparent' },
+          headerBackground: () => {
             return (
-                <SimpleLineIcons
+              <Layout style={{ flex: 1, backgroundColor: '#0d0e19' }} />
+            );
+          },
+          tabBarShowLabel: false,
+          tabBarIcon: ({ focused }) => {
+            return (
+                <Octicons
                 name='home'
                 size={24}
+                color={focused ? theme['color-primary-500'] : 'white'}
                 />
             );
           },
@@ -43,11 +74,19 @@ const BottomTabNav = () => {
         name='Games'
         component={Games}
         options={{
-          tabBarIcon: () => {
+          headerTitleStyle: { color: 'transparent' },
+          headerBackground: () => {
             return (
-              <SimpleLineIcons
-                name='home'
+              <Layout style={{ flex: 1, backgroundColor: '#0d0e19' }} />
+            );
+          },
+          tabBarShowLabel: false,
+          tabBarIcon: ({ focused }) => {
+            return (
+              <MaterialCommunityIcons 
+                name='dice-6-outline'
                 size={24}
+                color={focused ? theme['color-primary-500'] : 'white'}
               />
             );
           },
