@@ -18,14 +18,14 @@ export default function App() {
             name="EditProfile"
             component={Home}
             options={{
-              headerShown: false
+              headerShown: false,
             }}
           />
           <Stack.Screen
             name="BottomTabNavigation"
             component={BottomTabNav}
             options={{
-              headerShown: false
+              headerShown: false,
             }}
           />
         </Stack.Navigator>
