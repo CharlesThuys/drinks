@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { Event } from '@/types/event';
 
 const Events = () => {
-  const [events, setEvents] = useState<Event[]>([]);
+  const [events, setEvents] = useState<Event[] | null>();
 
   useEffect(() => {
     const getAllEvents = async () => {
@@ -17,9 +17,9 @@ const Events = () => {
 
   return (
     <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#0d0e19' }}>
-        {events ? events.map((event) => (
-            <Text key={event.id}>{event.name}</Text>
-        )) : 'No events'}
+      {events ? events.map((event) => (
+        <Text key={event.id}>{event.name}</Text>
+      )) : <Text>No events</Text>}
     </Layout>
   );
 };

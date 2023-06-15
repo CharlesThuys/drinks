@@ -7,7 +7,7 @@ import { ScrollView } from 'react-native';
 
 
 const Home = () => {
-  const [events, setEvents] = useState<Event[]>([]);
+  const [events, setEvents] = useState<Event[] | null >();
 
   useEffect(() => {
     const getAllUsers = async () => {
@@ -19,7 +19,7 @@ const Home = () => {
   }, []);
 
   return (
-    <Layout style={{ width: '100%', display: 'flex', justifyContent: 'center', backgroundColor: '#0d0e19', paddingLeft: 0, paddingRight: 10 }}>
+    <Layout style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', backgroundColor: '#0d0e19' }}>
       <ScrollView>
         {events ? events.map((event, index) => <EventCard event={event} key={index}/>) : <Text>No events</Text>}
       </ScrollView>
