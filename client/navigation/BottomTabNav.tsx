@@ -4,11 +4,14 @@ import {
   MaterialCommunityIcons,
 } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Home, Games, Events } from '@/screens';
-import { useTheme, Layout } from '@ui-kitten/components';
+import { Home, Games, Events, Profile } from '@/screens';
+import { Avatar, useTheme } from '@ui-kitten/components';
+import Header from '@/components/header';
 
 
 const Tab = createBottomTabNavigator();
+
+const DEFAULT_BACKGROUND = 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.aiysxhOBd9_RKdfjJ9wQYAHaEK%26pid%3DApi&f=1&ipt=c95fc3b5ad0164124cfc48ec7d41aaedc70baf99afe36900f9847781f3db11f7&ipo=images';
 
 
 const BottomTabNav = () => {
@@ -30,12 +33,7 @@ const BottomTabNav = () => {
         name='Home'
         component={Home}
         options={{
-          headerTitleStyle: { color: 'transparent' },
-          headerBackground: () => {
-            return (
-              <Layout style={{ flex: 1, backgroundColor: '#0d0e19' }} />
-            );
-          },
+          header: () => <Header />,
           tabBarShowLabel: false,
           tabBarIcon: ({ focused }) => {
             return (
@@ -52,12 +50,7 @@ const BottomTabNav = () => {
         name='Events'
         component={Events}
         options={{
-          headerTitleStyle: { color: 'transparent' },
-          headerBackground: () => {
-            return (
-              <Layout style={{ flex: 1, backgroundColor: '#0d0e19' }} />
-            );
-          },
+          header: () => <Header />,
           tabBarShowLabel: false,
           tabBarIcon: ({ focused }) => {
             return (
@@ -74,12 +67,7 @@ const BottomTabNav = () => {
         name='Games'
         component={Games}
         options={{
-          headerTitleStyle: { color: 'transparent' },
-          headerBackground: () => {
-            return (
-              <Layout style={{ flex: 1, backgroundColor: '#0d0e19' }} />
-            );
-          },
+          header: () => <Header />,
           tabBarShowLabel: false,
           tabBarIcon: ({ focused }) => {
             return (
@@ -91,8 +79,20 @@ const BottomTabNav = () => {
             );
           },
         }}
-      />
-      
+        />
+        <Tab.Screen
+        name='Profile'
+        component={Profile}
+        options={{
+          header: () => <Header />,
+          tabBarShowLabel: false,
+          tabBarIcon: ({ focused }) => {
+            return (
+              <Avatar size='small' source={{ uri: DEFAULT_BACKGROUND }} style={{ borderColor: 'white', borderWidth: focused ? 0.5 : 0 }}/>
+            );
+          },
+        }}
+        />
     </Tab.Navigator>
   );
 };

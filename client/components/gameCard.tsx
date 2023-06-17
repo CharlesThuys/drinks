@@ -3,6 +3,8 @@ import { Text, Card, useTheme } from '@ui-kitten/components';
 import { StyleSheet, View } from 'react-native';
 import { Octicons, MaterialIcons  } from '@expo/vector-icons'; 
 import * as Haptics from 'expo-haptics';
+import { useNavigation } from '@react-navigation/native';
+import { useGame } from '@/context/gameContext';
 
 const styles = StyleSheet.create({
   card: {
@@ -18,9 +20,14 @@ const styles = StyleSheet.create({
 
 const GameCard = ({ game } : { game :Game }) => {
   const theme = useTheme();
+  const { setGame } = useGame();
+  const navigation = useNavigation();
 
+  
   const openGame = () => {
     Haptics.selectionAsync();
+    navigation.navigate('Game' as never);
+    setGame(game);
   };
   
   return (

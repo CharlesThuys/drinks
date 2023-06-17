@@ -7,3 +7,8 @@ export type Game = {
   userId: string;
   materials: string[];
 };
+
+export type GameContextType = {
+  game: Game | null;
+  setGame: (game: Game) => void;
+};

@@ -40,6 +40,7 @@ const Event = () => {
   const [liked, setLiked] = useState(false);
   const [date, setDate] = useState<Date>();
 
+  
   const navigateBack = () => {
     navigation.goBack();
     Haptics.selectionAsync();
@@ -49,8 +50,6 @@ const Event = () => {
     setLiked(!liked);
     Haptics.selectionAsync();
   };
-
-  
 
   useEffect(() => {
     if (event) {
