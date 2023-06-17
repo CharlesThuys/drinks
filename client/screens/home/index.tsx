@@ -31,6 +31,13 @@ const Home = () => {
 
   return (
     <Layout style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', backgroundColor: '#0d0e19' }}>
+      <View style={{ marginLeft: 15, marginBottom: 15, display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+        <Text category='h5'>Events</Text>
+        <View style={{ backgroundColor: '#21242a', width: 30, height: 30, borderRadius: 100, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Text style={{ fontSize: 15 }}>{events?.length || 0}</Text>
+        </View>
+      </View>
+      
       {loading && 
         <FlatList
         data={[0, 1, 2]}
@@ -38,12 +45,7 @@ const Home = () => {
           <EventSkeleton />
         )}
       />}
-      <View style={{ marginLeft: 15, marginBottom: 15, display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-        <Text category='h5'>Events</Text>
-        <View style={{ backgroundColor: '#21242a', width: 30, height: 30, borderRadius: 100, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <Text style={{ fontSize: 15 }}>{events?.length || 0}</Text>
-        </View>
-      </View>
+
       <FlatList
         data={events}
         renderItem={({ item }) => (

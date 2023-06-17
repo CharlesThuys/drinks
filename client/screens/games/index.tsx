@@ -36,6 +36,7 @@ const Games = () => {
           <Text style={{ fontSize: 15 }}>{games?.length || 0}</Text>
         </View>
       </View>
+
        {loading && 
         <FlatList
         data={[0, 1, 2]}
@@ -43,6 +44,7 @@ const Games = () => {
           <GameSkeleton />
         )}
       />}
+      
       <FlatList
         data={games}
         renderItem={({ item }) => (
