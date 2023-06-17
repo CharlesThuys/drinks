@@ -27,28 +27,6 @@ const BottomTabNav = () => {
       },
     }}>
         <Tab.Screen
-        name='Events'
-        component={Events}
-        options={{
-          headerTitleStyle: { color: 'transparent' },
-          headerBackground: () => {
-            return (
-              <Layout style={{ flex: 1, backgroundColor: '#0d0e19' }} />
-            );
-          },
-          tabBarShowLabel: false,
-          tabBarIcon: ({ focused }) => {
-            return (
-              <AntDesign 
-              name='calendar'
-              size={24}
-              color={focused ? theme['color-primary-500'] : 'white'}
-              />
-            );
-          },
-        }}
-        />
-        <Tab.Screen
         name='Home'
         component={Home}
         options={{
@@ -66,6 +44,28 @@ const BottomTabNav = () => {
                 size={24}
                 color={focused ? theme['color-primary-500'] : 'white'}
                 />
+            );
+          },
+        }}
+        />
+        <Tab.Screen
+        name='Events'
+        component={Events}
+        options={{
+          headerTitleStyle: { color: 'transparent' },
+          headerBackground: () => {
+            return (
+              <Layout style={{ flex: 1, backgroundColor: '#0d0e19' }} />
+            );
+          },
+          tabBarShowLabel: false,
+          tabBarIcon: ({ focused }) => {
+            return (
+              <AntDesign 
+              name='calendar'
+              size={24}
+              color={focused ? theme['color-primary-500'] : 'white'}
+              />
             );
           },
         }}

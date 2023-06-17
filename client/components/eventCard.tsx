@@ -1,8 +1,11 @@
-import { Text, Card, Layout, useTheme, Button, Avatar } from '@ui-kitten/components';
+import { Text, Card, Layout, useTheme, Avatar } from '@ui-kitten/components';
 import { ImageBackground, StyleSheet, View } from 'react-native';
 import { Event } from '@/types/event';
-import { AntDesign } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
+import { useEvent } from '@/context/eventContext';
+import { useNavigation } from '@react-navigation/native';
+import { useState } from 'react';
+import LikeButton from './likeButton';
 
 const styles = StyleSheet.create({
   card: {
@@ -31,15 +34,17 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
   },
-  button: {
-    borderRadius: 100,
-  },
 });
 
 const DEFAULT_BACKGROUND = 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.aiysxhOBd9_RKdfjJ9wQYAHaEK%26pid%3DApi&f=1&ipt=c95fc3b5ad0164124cfc48ec7d41aaedc70baf99afe36900f9847781f3db11f7&ipo=images';
 
 const EventCard = ({ event }: { event: Event }) => {
   const theme = useTheme();
+  const { setEvent } = useEvent();
+  const navigation = useNavigation();
+
+  const [liked, setLiked] = useState<boolean>(false);
+
 
   const dateObject = new Date(event.date);
 
@@ -53,9 +58,12 @@ const EventCard = ({ event }: { event: Event }) => {
 
   const openEvent = () => {
     Haptics.selectionAsync();
+    setEvent(event);
+    navigation.navigate('Event' as never);
   };
 
   const likeEvent = () => {
+    setLiked(!liked);
     Haptics.selectionAsync();
   };
 
@@ -67,11 +75,11 @@ const EventCard = ({ event }: { event: Event }) => {
       <ImageBackground source={{ uri: event.picture ? event.picture : DEFAULT_BACKGROUND }} resizeMode="cover" style={styles.image}>
         <Layout style={{ ...styles.overlay }}>
 
-          <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginLeft: 10, marginRight: 20, marginTop: 15 }}>
+          <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginLeft: 10, marginRight: 10, marginTop: 15 }}>
             <View style={{ ...styles.badge, backgroundColor: theme['color-primary-500'] }}>
               <Text style={styles.text}>15 participants</Text>
             </View>
-            <Button onPress={likeEvent} style={styles.button} children={() => { return <AntDesign name="hearto" size={18} color="white" />; }} />
+            <LikeButton liked={liked} onLike={likeEvent}/>
           </View>
 
           <View style={{ flex: 2 }}>
@@ -80,7 +88,7 @@ const EventCard = ({ event }: { event: Event }) => {
             </View>
           </View>
 
-          <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginLeft: 10, marginRight: 20, marginBottom: 15 }}>
+          <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginLeft: 10, marginRight: 10, marginBottom: 15 }}>
             <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 4 }}>
               <Avatar source={{ uri: DEFAULT_BACKGROUND }} />
               <Text category='s1'>{event.userId}</Text>

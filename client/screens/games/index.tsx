@@ -1,9 +1,9 @@
 import GameCard from '@/components/gameCard';
 import { Game } from '@/types/game';
 import { fetcher } from '@/utils/fetcher';
-import { Layout, Text } from '@ui-kitten/components';
+import { Layout } from '@ui-kitten/components';
 import { useEffect, useState } from 'react';
-import { ScrollView } from 'react-native';
+import { FlatList } from 'react-native';
 
 const Games = () => {
   const [games, setGames] = useState<Game[] | null>([]);
@@ -18,9 +18,15 @@ const Games = () => {
   }, []);
   return (
     <Layout style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', backgroundColor: '#0d0e19' }}>
-      <ScrollView>
-        {games ? games.map((game, index) => <GameCard game={game} key={index}/>) : <Text>No games</Text>}
-      </ScrollView>
+      <FlatList
+        data={games}
+        renderItem={({ item }) => (
+          <GameCard
+            game={item}
+          />
+        )}
+        keyExtractor={(item) => item.id}
+      />
   </Layout>
   );
 };

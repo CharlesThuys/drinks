@@ -1,9 +1,9 @@
-import { Layout, Text } from '@ui-kitten/components';
+import { Layout } from '@ui-kitten/components';
 import { fetcher } from '@/utils/fetcher';
 import { useState, useEffect } from 'react';
 import { Event } from '@/types/event';
 import EventCard from '@/components/eventCard';
-import { ScrollView } from 'react-native';
+import { FlatList } from 'react-native';
 
 
 const Home = () => {
@@ -20,9 +20,15 @@ const Home = () => {
 
   return (
     <Layout style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', backgroundColor: '#0d0e19' }}>
-      <ScrollView>
-        {events ? events.map((event, index) => <EventCard event={event} key={index}/>) : <Text>No events</Text>}
-      </ScrollView>
+     <FlatList
+        data={events}
+        renderItem={({ item }) => (
+          <EventCard
+            event={item}
+          />
+        )}
+        keyExtractor={(item) => item.id}
+      />
     </Layout>
   );
 };

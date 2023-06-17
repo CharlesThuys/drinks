@@ -9,3 +9,8 @@ export type Event = {
   date: Date;
   userId: string;
 };
+
+export type EventContextType = {
+  event: Event | null;
+  setEvent: (event: Event) => void;
+};
