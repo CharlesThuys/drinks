@@ -1,9 +1,14 @@
 import express from 'express';
-import { getAllEvents, getEvent, createEvent, updateEvent, deleteEvent } from '../services/events';
+import {
+  getAllEvents,
+  getEvent,
+  createEvent,
+  updateEvent,
+  deleteEvent,
+} from '../services/events';
 import { Event } from '@prisma/client';
 
 const router = express.Router();
-
 
 router.get('/', async (req, res) => {
   const events: Event[] = await getAllEvents();
@@ -31,7 +36,7 @@ router.post('/', async (req, res) => {
   try {
     const event: Event = req.body;
     const newEvent: Event = await createEvent(event);
-  
+
     res.json({
       newEvent,
     });
@@ -40,7 +45,6 @@ router.post('/', async (req, res) => {
       message: error.message,
     });
   }
-  
 });
 
 router.put('/:id', async (req, res) => {
@@ -73,6 +77,5 @@ router.delete('/:id', async (req, res) => {
     });
   }
 });
-
 
 export default router;
