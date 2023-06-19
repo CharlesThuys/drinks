@@ -14,8 +14,8 @@ router.get('/', (req, res) => {
   });
 });
 
-router.use('/users', users);
-router.use('/events', events);
+router.use('/users', authCheck, users);
+router.use('/events', authCheck, events);
 router.use('/games', authCheck, games);
 router.use('/auth', auth);
 
