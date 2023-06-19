@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, Layout, Popover } from '@ui-kitten/components';
 import { AntDesign } from '@expo/vector-icons';
@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    paddingHorizontal: 4,
+    paddingHorizontal: 5,
     gap: 10,
     backgroundColor: 'transparent',
   },
@@ -18,12 +18,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   button: {
-    width: 50,
-    height: 50,
     alignItems: 'center',
     justifyContent: 'center',
   },
   box: {
+    backgroundColor: '#21242a',
+    borderColor: '#21242a',
     width: 200,
     height: 50,
   },
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
 export const AddContent = (): React.ReactElement => {
   const navigation = useNavigation();
   
-  const [visible, setVisible] = React.useState(false);
+  const [visible, setVisible] = useState(false);
 
   const handleClick = () => {
     setVisible(true);
@@ -52,9 +52,9 @@ export const AddContent = (): React.ReactElement => {
     navigation.navigate('AddGame' as never);
   };
 
-  const renderToggleButton = (): React.ReactElement => (
+  const renderToggleButton = (): ReactElement => (
     <View style={styles.button}>
-      <AntDesign onPress={handleClick} name="plus" size={32} color="white"/>
+      <AntDesign onPress={handleClick} name="plus" size={28} color="white"/>
     </View>
   );
 

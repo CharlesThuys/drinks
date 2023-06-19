@@ -5,8 +5,13 @@ import { Event } from '@/types/event';
 import { FlatList, RefreshControl, View } from 'react-native';
 import EventCard from '@/components/eventCard';
 import { EventSkeleton } from '@/components/skeleton';
+import { useNavigationState } from '@react-navigation/native';
+import { useHeader } from '@/context/headerContext';
 
 const Events = () => {
+  const routeObject = useNavigationState((state) => state);
+  const { setContent } = useHeader();
+
   const [events, setEvents] = useState<Event[] | null>();
   const [loading, setLoading] = useState<boolean>(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -15,6 +20,21 @@ const Events = () => {
   const refresh = () => {
     setRefreshing(true);
     setEvents(null);
+  };
+
+  const setHeader = () => {
+    const routeName = routeObject.routeNames[routeObject.index];
+
+    const content =  (
+      <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+        <Text category='h5'>Attending events</Text>
+        <View style={{ backgroundColor: '#21242a', width: 30, height: 30, borderRadius: 100, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Text style={{ fontSize: 15 }}>{events?.length || 0}</Text>
+        </View>
+      </View>
+    );
+
+    if (routeName === 'Events') setContent(content);
   };
 
   useEffect(() => {
@@ -28,15 +48,12 @@ const Events = () => {
     getAllEvents();
   }, [refreshing]);
 
+  useEffect(() => {
+    setHeader();
+  }, [routeObject, events]);
+
   return (
     <Layout style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', backgroundColor: '#0d0e19' }}>
-      <View style={{ marginLeft: 15, marginBottom: 15, display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-        <Text category='h5'>Events you're attending</Text>
-        <View style={{ backgroundColor: '#21242a', width: 30, height: 30, borderRadius: 100, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <Text style={{ fontSize: 15 }}>{events?.length || 0}</Text>
-        </View>
-      </View>
-
       {loading && 
         <FlatList
         data={[0, 1, 2]}
