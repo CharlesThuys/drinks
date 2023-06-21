@@ -6,6 +6,7 @@ import Game from './game';
 import Profile from './profile';
 import AddEvent from './addContent/event';
 import AddGame from './addContent/game';
+import LoginScreen from './login';
 
 export {
   Home,
@@ -16,4 +17,5 @@ export {
   Profile,
   AddEvent,
   AddGame,
+  LoginScreen,
 };
