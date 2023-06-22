@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Avatar, Button, Layout, Popover } from '@ui-kitten/components';
 import React, { ReactElement, useState } from 'react';
 import * as Haptics from 'expo-haptics';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 import { useAuth } from '@/context/authContext';
 
 const DEFAULT_BACKGROUND = 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.aiysxhOBd9_RKdfjJ9wQYAHaEK%26pid%3DApi&f=1&ipt=c95fc3b5ad0164124cfc48ec7d41aaedc70baf99afe36900f9847781f3db11f7&ipo=images';
@@ -39,17 +39,17 @@ const Profile = () => {
 
   const handleClick = () => {
     setVisible(true);
-    Haptics.selectionAsync();
+    if (Platform.OS === 'ios') Haptics.selectionAsync();
   };
 
   const openEvent = () => {
     setVisible(false);
-    Haptics.selectionAsync();
+    if (Platform.OS === 'ios') Haptics.selectionAsync();
     navigation.navigate('Profile' as never);
   };
   
   const logoutUser = () => {
-    Haptics.selectionAsync();
+    if (Platform.OS === 'ios') Haptics.selectionAsync();
     logout();
   };
 

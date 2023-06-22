@@ -1,6 +1,6 @@
 import { Input, Text, Layout, Button, useTheme } from '@ui-kitten/components';
 import { ReactElement, useState } from 'react';
-import { TouchableWithoutFeedback } from 'react-native';
+import { TouchableWithoutFeedback, Platform } from 'react-native';
 import { Feather } from '@expo/vector-icons'; 
 import { useNavigation } from '@react-navigation/native';
 import * as Haptics from 'expo-haptics';
@@ -28,13 +28,13 @@ const LoginForm = () => {
   );
 
   const navigateToSignUp = () => {
-    Haptics.selectionAsync();
+    if (Platform.OS === 'ios') Haptics.selectionAsync();
     navigation.navigate('Sign Up' as never);
   };
 
   const signInUser = async () => {
     setError(false);
-    Haptics.selectionAsync();
+    if (Platform.OS === 'ios') Haptics.selectionAsync();
     const res = await signIn(username, password);
     if (res.error) { 
       setError(true);

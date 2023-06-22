@@ -1,6 +1,6 @@
 import { Game } from '@/types/game';
 import { Text, Card, useTheme } from '@ui-kitten/components';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Platform } from 'react-native';
 import { Octicons, MaterialIcons  } from '@expo/vector-icons'; 
 import * as Haptics from 'expo-haptics';
 import { useNavigation } from '@react-navigation/native';
@@ -25,7 +25,7 @@ const GameCard = ({ game } : { game :Game }) => {
 
   
   const openGame = () => {
-    Haptics.selectionAsync();
+    if (Platform.OS === 'ios') Haptics.selectionAsync();
     navigation.navigate('Game' as never);
     setGame(game);
   };

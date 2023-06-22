@@ -1,6 +1,6 @@
 import { useEvent } from '@/context/eventContext';
 import { Avatar, Layout, Text, useTheme } from '@ui-kitten/components';
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; 
 import { useNavigation } from '@react-navigation/native';
 import * as Haptics from 'expo-haptics';
@@ -43,12 +43,12 @@ const Event = () => {
   
   const navigateBack = () => {
     navigation.goBack();
-    Haptics.selectionAsync();
+    if (Platform.OS === 'ios') Haptics.selectionAsync();
   };
 
   const likeEvent = () => {
     setLiked(!liked);
-    Haptics.selectionAsync();
+    if (Platform.OS === 'ios') Haptics.selectionAsync();
   };
 
   useEffect(() => {

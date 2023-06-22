@@ -1,5 +1,5 @@
 import { Text, Card, Layout, useTheme, Avatar } from '@ui-kitten/components';
-import { ImageBackground, StyleSheet, View } from 'react-native';
+import { ImageBackground, StyleSheet, View, Platform } from 'react-native';
 import { Event } from '@/types/event';
 import * as Haptics from 'expo-haptics';
 import { useEvent } from '@/context/eventContext';
@@ -57,14 +57,14 @@ const EventCard = ({ event }: { event: Event }) => {
   const seconds = dateObject.getSeconds();
 
   const openEvent = () => {
-    Haptics.selectionAsync();
+    if (Platform.OS === 'ios') Haptics.selectionAsync();
     setEvent(event);
     navigation.navigate('Event' as never);
   };
 
   const likeEvent = () => {
     setLiked(!liked);
-    Haptics.selectionAsync();
+    if (Platform.OS === 'ios') Haptics.selectionAsync();
   };
 
   return (

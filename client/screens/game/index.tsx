@@ -3,7 +3,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { Layout, Text, useTheme } from '@ui-kitten/components';
 import React from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity, Platform } from 'react-native';
 import * as Haptics from 'expo-haptics';
 
 const Index = () => {
@@ -14,7 +14,7 @@ const Index = () => {
 
   const navigateBack = () => {
     navigation.goBack();
-    Haptics.selectionAsync();
+    if (Platform.OS === 'ios') Haptics.selectionAsync();
   };
 
   return (

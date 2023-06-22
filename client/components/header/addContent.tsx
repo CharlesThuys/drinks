@@ -1,5 +1,5 @@
 import React, { ReactElement, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Platform } from 'react-native';
 import { Button, Layout, Popover } from '@ui-kitten/components';
 import { AntDesign } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
@@ -37,18 +37,18 @@ export const AddContent = (): React.ReactElement => {
 
   const handleClick = () => {
     setVisible(true);
-    Haptics.selectionAsync();
+    if (Platform.OS === 'ios') Haptics.selectionAsync();
   };
 
   const openEvent = () => {
     setVisible(false);
-    Haptics.selectionAsync();
+    if (Platform.OS === 'ios') Haptics.selectionAsync();
     navigation.navigate('AddEvent' as never);
   };
 
   const openGame = () => {
     setVisible(false);
-    Haptics.selectionAsync();
+    if (Platform.OS === 'ios') Haptics.selectionAsync();
     navigation.navigate('AddGame' as never);
   };
 
