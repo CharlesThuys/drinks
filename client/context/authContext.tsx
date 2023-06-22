@@ -1,7 +1,8 @@
-import { ReactElement, createContext, useContext, useState } from 'react';
+import { ReactElement, createContext, useContext, useEffect, useState } from 'react';
 import { User } from '@/types/user';
 import { Auth } from '@/types/auth';
 import { fetcher } from '@/utils/fetcher';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const AuthContext = createContext<Auth>({
   user: null,
@@ -27,8 +28,12 @@ const AuthProvider = ({ children }: { children: ReactElement }) => {
     try {
       const res = await fetcher('auth/register', 'post', '', { name: username, password, profile_picture: '' });
       if (res.user) { 
+        const jsonValue = JSON.stringify(res);
+        await AsyncStorage.setItem('user', jsonValue);
+
         setUser(res.user); 
         setBearerToken(res.token);
+
         return { data: res.user };
       } else return { error: res };
     } catch (err: any) {
@@ -40,8 +45,12 @@ const AuthProvider = ({ children }: { children: ReactElement }) => {
     try {
       const res = await fetcher('auth/login', 'post', '', { name: username, password });
       if (res.user) { 
+        const jsonValue = JSON.stringify(res);
+        await AsyncStorage.setItem('user', jsonValue);
+
         setUser(res.user); 
         setBearerToken(res.token);
+
         return { data: res.user };
       } else return { error: res };
     } catch (err: any) {
@@ -51,7 +60,23 @@ const AuthProvider = ({ children }: { children: ReactElement }) => {
 
   const logout = async () => {
     setUser(null);
+    await AsyncStorage.removeItem('user');
   };
+
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const res = await AsyncStorage.getItem('user');
+        if (!res) return;
+        const resJson = JSON.parse(res);
+        setUser(resJson.user);
+        setBearerToken(resJson.token);
+      } catch (e) {
+      }
+    };
+    
+    getUser();
+  }, []);
 
   return (
     <AuthContext.Provider
