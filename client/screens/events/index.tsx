@@ -7,8 +7,10 @@ import EventCard from '@/components/eventCard';
 import { EventSkeleton } from '@/components/skeleton';
 import { useNavigationState } from '@react-navigation/native';
 import { useHeader } from '@/context/headerContext';
+import { useAuth } from '@/context/authContext';
 
 const Events = () => {
+  const { bearerToken } = useAuth();
   const routeObject = useNavigationState((state) => state);
   const { setContent } = useHeader();
 
@@ -39,10 +41,16 @@ const Events = () => {
 
   useEffect(() => {
     const getAllEvents = async () => {
-      const data = await fetcher('events', 'get');
-      setEvents(data.events);
-      setLoading(false);
-      setRefreshing(false);
+      try { 
+        const res = await fetcher('events', 'get', bearerToken);
+        setEvents(res.events);
+        setLoading(false);
+        setRefreshing(false);
+      } catch (err) {
+        console.log(err);
+        setLoading(false);
+        setRefreshing(false);
+      }
     };
 
     getAllEvents();

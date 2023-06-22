@@ -1,24 +1,16 @@
 import { Input, Text, Layout, Button, useTheme } from '@ui-kitten/components';
 import { ReactElement, useState } from 'react';
-import { TouchableWithoutFeedback, StyleSheet, View } from 'react-native';
+import { TouchableWithoutFeedback } from 'react-native';
 import { Feather } from '@expo/vector-icons'; 
 import { useNavigation } from '@react-navigation/native';
 import * as Haptics from 'expo-haptics';
 import { useAuth } from '@/context/authContext';
 
-
-const styles = StyleSheet.create({
-  captionContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  captionText: {
-    fontSize: 12,
-    fontWeight: '400',
-    color: '#8F9BB3',
-  },
-});
+type Errors = {
+  username?: string;
+  password?: string;
+  passwordConfirm?: string;
+};
 
 const RegisterForm = () => {
   const { signUp } = useAuth();
@@ -28,9 +20,9 @@ const RegisterForm = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
-
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [secureTextEntryConfirm, setSecureTextEntryConfirm] = useState(true);
+  const [errors, setErrors] = useState<Errors>({ username: '', password: '', passwordConfirm: '' });
 
 
   const toggleSecureEntry = (): void => {
@@ -53,32 +45,46 @@ const RegisterForm = () => {
     </TouchableWithoutFeedback>
   );
 
-  const renderCaption = (): ReactElement => {
-    return (
-      <View style={styles.captionContainer}>
-        <Text style={styles.captionText}>
-          Should contain at least 8 symbols
-        </Text>
-      </View>
-    );
-  };
-
   const navigateToSignUp = () => {
     Haptics.selectionAsync();
     navigation.navigate('Index' as never);
   };
 
-  const signUpUser = () => {
+  const signUpUser = async () => {
+    setErrors({ username: '', password: '', passwordConfirm: '' });
+
+    if (password !== passwordConfirm) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        passwordConfirm: 'Passwords do not match',
+      }));
+      return;
+    }
+
     Haptics.selectionAsync();
-    signUp(username, password);
+    const res = await signUp(username, password);
+    if (res.error) { 
+      if (res.error === 'User already exists') {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          username: res.error,
+        }));
+      }
+    }
   };
   
   return (
     <Layout style={{ width: '100%', height: '100%', display: 'flex', gap: 15, justifyContent: 'center', backgroundColor: '#0d0e19', padding: 20 }}>
+      <Text style={{ fontSize: 30, fontWeight: 'bold', color: theme['color-primary-500'], textAlign: 'center' }}>Sign up</Text>
+      <Layout style={{ backgroundColor: '#0d0e19' }}>
+        { errors.username && <Text style={{ color: 'red' }}>{errors.username}</Text> }
+        { errors.password && <Text style={{ color: 'red' }}>{errors.password}</Text> }
+        { errors.passwordConfirm && <Text style={{ color: 'red' }}>{errors.passwordConfirm}</Text> }
+      </Layout>
       <Input
         value={username}
         label='Username'
-        status='default'
+        status={errors.username ? 'danger' : 'default'}
         placeholder='Username'
         onChangeText={nextValue => setUsername(nextValue)}
         size='large'
@@ -86,8 +92,8 @@ const RegisterForm = () => {
       <Input
         value={password}
         label='Password'
+        status={errors.password ? 'danger' : 'default'}
         placeholder='Password'
-        caption={renderCaption}
         accessoryRight={renderIcon}
         secureTextEntry={secureTextEntry}
         onChangeText={nextValue => setPassword(nextValue)}
@@ -96,11 +102,13 @@ const RegisterForm = () => {
       <Input
         value={passwordConfirm}
         label='Confirm Password'
+        status={errors.passwordConfirm ? 'danger' : 'default'}
         placeholder='Confirm password'
         accessoryRight={renderIconConfirm}
         secureTextEntry={secureTextEntryConfirm}
         onChangeText={nextValue => setPasswordConfirm(nextValue)}
         size='large'
+
       />
       <Button onPress={signUpUser}>Sign up</Button>
       <Layout style={{ display: 'flex', flexDirection: 'row', backgroundColor: '#0d0e19', gap: 3 }}>

@@ -7,9 +7,11 @@ import { FlatList, RefreshControl, View } from 'react-native';
 import { EventSkeleton } from '@/components/skeleton';
 import { useHeader } from '@/context/headerContext';
 import { useNavigationState } from '@react-navigation/native';
+import { useAuth } from '@/context/authContext';
 
 
 const Home = () => {
+  const { bearerToken } = useAuth();
   const { setContent } = useHeader();
   const routeObject = useNavigationState((state) => state);
 
@@ -40,14 +42,20 @@ const Home = () => {
 
   useEffect(() => {
     const getAllUsers = async () => {
-      const data = await fetcher('events', 'get');
-      setEvents(data.events);
-      setLoading(false);
-      setRefreshing(false);
+      try { 
+        const res = await fetcher('events', 'get', bearerToken);
+        setEvents(res.events);
+        setLoading(false);
+        setRefreshing(false);
+      } catch (err) {
+        console.log(err);
+        setLoading(false);
+        setRefreshing(false);
+      }
     };
 
     getAllUsers();
-  }, [refreshing]);
+  }, [refreshing, bearerToken]);
 
   useEffect(() => {
     setHeader();

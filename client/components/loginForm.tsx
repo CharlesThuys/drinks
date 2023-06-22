@@ -1,24 +1,11 @@
 import { Input, Text, Layout, Button, useTheme } from '@ui-kitten/components';
 import { ReactElement, useState } from 'react';
-import { TouchableWithoutFeedback, StyleSheet, View } from 'react-native';
+import { TouchableWithoutFeedback } from 'react-native';
 import { Feather } from '@expo/vector-icons'; 
 import { useNavigation } from '@react-navigation/native';
 import * as Haptics from 'expo-haptics';
 import { useAuth } from '@/context/authContext';
 
-
-const styles = StyleSheet.create({
-  captionContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  captionText: {
-    fontSize: 12,
-    fontWeight: '400',
-    color: '#8F9BB3',
-  },
-});
 
 const LoginForm = () => {
   const { signIn } = useAuth();
@@ -27,8 +14,8 @@ const LoginForm = () => {
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-
   const [secureTextEntry, setSecureTextEntry] = useState(true);
+  const [error, setError] = useState<boolean>(false);
 
   const toggleSecureEntry = (): void => {
     setSecureTextEntry(!secureTextEntry);
@@ -40,32 +27,28 @@ const LoginForm = () => {
     </TouchableWithoutFeedback>
   );
 
-  const renderCaption = (): ReactElement => {
-    return (
-      <View style={styles.captionContainer}>
-        <Text style={styles.captionText}>
-          Should contain at least 8 symbols
-        </Text>
-      </View>
-    );
-  };
-
   const navigateToSignUp = () => {
     Haptics.selectionAsync();
     navigation.navigate('Sign Up' as never);
   };
 
-  const signInUser = () => {
+  const signInUser = async () => {
+    setError(false);
     Haptics.selectionAsync();
-    signIn(username, password);
+    const res = await signIn(username, password);
+    if (res.error) { 
+      setError(true);
+    }
   };
   
   return (
     <Layout style={{ width: '100%', height: '100%', display: 'flex', gap: 15, justifyContent: 'center', backgroundColor: '#0d0e19', padding: 20 }}>
+      <Text style={{ fontSize: 30, fontWeight: 'bold', color: theme['color-primary-500'], textAlign: 'center' }}>Sign in</Text>
+      {error && <Text style={{ color: 'red' }}>Invalid username or password</Text>}
       <Input
         value={username}
         label='Username'
-        status='default'
+        status={error ? 'danger' : 'default'}
         placeholder='Username'
         size='large'
         onChangeText={nextValue => setUsername(nextValue)}
@@ -73,8 +56,8 @@ const LoginForm = () => {
       <Input
         value={password}
         label='Password'
+        status={error ? 'danger' : 'default'}
         placeholder='Password'
-        caption={renderCaption}
         accessoryRight={renderIcon}
         secureTextEntry={secureTextEntry}
         onChangeText={nextValue => setPassword(nextValue)}

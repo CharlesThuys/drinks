@@ -2,7 +2,8 @@ import { User } from './user';
 
 export type Auth = {
   user: User | null
-  signUp: (username: string, password: string) => void
-  signIn: (username: string, password: string) => void
+  bearerToken: string | null
+  signUp: (username: string, password: string) => Promise<{ data?: any, error?: string }> 
+  signIn: (username: string, password: string) => Promise<{ data?: any, error?: string }>
   logout: () => void
 };
