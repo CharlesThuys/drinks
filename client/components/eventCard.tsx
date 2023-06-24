@@ -4,8 +4,9 @@ import { Event } from '@/types/event';
 import * as Haptics from 'expo-haptics';
 import { useEvent } from '@/context/eventContext';
 import { useNavigation } from '@react-navigation/native';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import LikeButton from './likeButton';
+import { checkPictureUrl } from '@/utils';
 
 const styles = StyleSheet.create({
   card: {
@@ -44,6 +45,8 @@ const EventCard = ({ event }: { event: Event }) => {
   const navigation = useNavigation();
 
   const [liked, setLiked] = useState<boolean>(false);
+  const [validImage, setValidImage] = useState<boolean>(false);
+  const [validAvatar, setValidAvatar] = useState<boolean>(false);
 
 
   const dateObject = new Date(event.date);
@@ -67,12 +70,32 @@ const EventCard = ({ event }: { event: Event }) => {
     if (Platform.OS === 'ios') Haptics.selectionAsync();
   };
 
+  useEffect(() => {
+    checkPictureUrl(event.picture)
+      .then(isValidProfilePictureUrl => {
+        if (isValidProfilePictureUrl) {
+          setValidImage(true);
+        } else {
+          setValidImage(false);
+        }
+      });
+
+    checkPictureUrl(event.user.profile_picture)
+      .then(isValidProfilePictureUrl => {
+        if (isValidProfilePictureUrl) {
+          setValidAvatar(true);
+        } else {
+          setValidAvatar(false);
+        }
+      });
+  }, [event]);
+
   return (
     <Card
       style={styles.card}
       onPress={openEvent}
     >
-      <ImageBackground source={{ uri: event.picture ? event.picture : DEFAULT_BACKGROUND }} resizeMode="cover" style={styles.image}>
+      <ImageBackground source={{ uri: validImage ? event.picture : DEFAULT_BACKGROUND }} resizeMode="cover" style={styles.image}>
         <Layout style={{ ...styles.overlay }}>
 
           <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginLeft: 10, marginRight: 10, marginTop: 15 }}>
@@ -90,8 +113,8 @@ const EventCard = ({ event }: { event: Event }) => {
 
           <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginLeft: 10, marginRight: 10, marginBottom: 15 }}>
             <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 4 }}>
-              <Avatar source={{ uri: DEFAULT_BACKGROUND }} />
-              <Text category='s1'>{event.userId}</Text>
+              <Avatar onError={() => { setValidAvatar(false); }} source={{ uri: validAvatar ? event.user.profile_picture : DEFAULT_BACKGROUND }} />
+              <Text category='s1'>{event.user.name}</Text>
             </View>
             <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-end', gap: 4 }}>
               <Text category='s1'>{hours}:{minutes}:{seconds}</Text>

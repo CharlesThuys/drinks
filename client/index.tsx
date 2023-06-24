@@ -10,7 +10,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as eva from '@eva-design/eva';
 import { default as theme } from '@/assets/custom-theme.json';
 import { useAuth } from '@/context/authContext';
-import BottomTabNav from './navigation/BottomTabNav';
+import BottomTabNav from './navigation/bottomTabNav';
 import RegisterScreen from './screens/register';
 
 

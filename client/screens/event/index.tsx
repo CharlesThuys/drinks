@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import * as Haptics from 'expo-haptics';
 import LikeButton from '@/components/likeButton';
 import { useEffect, useState } from 'react';
+import { checkPictureUrl } from '@/utils';
 
 const styles = StyleSheet.create({
   image: {
@@ -39,6 +40,8 @@ const Event = () => {
 
   const [liked, setLiked] = useState(false);
   const [date, setDate] = useState<Date>();
+  const [validImage, setValidImage] = useState(false);
+  const [validAvatar, setValidAvatar] = useState<boolean>(false);
 
   
   const navigateBack = () => {
@@ -55,10 +58,27 @@ const Event = () => {
     if (event) {
       const dateObject = new Date(event.date);
       setDate(dateObject);
+
+      checkPictureUrl(event.picture)
+        .then(isValidProfilePictureUrl => {
+          if (isValidProfilePictureUrl) {
+            setValidImage(true);
+          } else {
+            setValidImage(false);
+          }
+        });
+
+      checkPictureUrl(event.user.profile_picture)
+        .then(isValidProfilePictureUrl => {
+          if (isValidProfilePictureUrl) {
+            setValidAvatar(true);
+          } else {
+            setValidAvatar(false);
+          }
+        });
     }
   }, [event]);
 
-  
   return (
     event &&
     <Layout style={{ height: '100%', width: '100%', display: 'flex', flexDirection: 'column', backgroundColor: '#0d0e19' }}>
@@ -74,8 +94,9 @@ const Event = () => {
       </View>
 
       <Image
+        onError={() => { setValidImage(false);}}
         style={styles.image}
-        source={{ uri: event.picture || DEFAULT_BACKGROUND }}
+        source={ { uri: validImage ? event.picture : DEFAULT_BACKGROUND }}
       />
 
       <View style={{ marginTop: -37 }}>
@@ -89,8 +110,8 @@ const Event = () => {
 
       <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 5, marginVertical: 20 }}>
         <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 4 }}>
-          <Avatar source={{ uri: DEFAULT_BACKGROUND }} />
-          <Text category='s1'>{event.userId}</Text>
+          <Avatar onError={() => { setValidAvatar(false); }} source={{ uri: validAvatar ? event.user.profile_picture : DEFAULT_BACKGROUND }} />
+          <Text category='s1'>{event.user.name}</Text>
         </View>
         <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-end', gap: 4 }}>
           {date && 
