@@ -2,13 +2,30 @@ import { prisma } from '../../prisma/prisma';
 import { Game } from '@prisma/client';
 
 export const getAllGames = async (): Promise<Game[]> => {
-  return prisma.game.findMany();
+  return prisma.game.findMany({
+    include: {
+      user: {
+        select: {
+          name: true,
+          profile_picture: true,
+        },
+      },
+    },
+  });
 };
 
 export const getGame = async (id: string): Promise<Game | null> => {
   return prisma.game.findUnique({
     where: {
       id,
+    },
+    include: {
+      user: {
+        select: {
+          name: true,
+          profile_picture: true,
+        },
+      },
     },
   });
 };

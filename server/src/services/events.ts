@@ -2,13 +2,32 @@ import { prisma } from '../../prisma/prisma';
 import { Event } from '@prisma/client';
 
 export const getAllEvents = async (): Promise<Event[]> => {
-  return prisma.event.findMany();
+  return prisma.event.findMany(
+    {
+      include: {
+        user: {
+          select: {
+            name: true,
+            profile_picture: true,
+          },
+        },
+      },
+    },
+  );
 };
 
 export const getEvent = async (id: string): Promise<Event | null> => {
   return prisma.event.findUnique({
     where: {
       id,
+    },
+    include: {
+      user: {
+        select: {
+          name: true,
+          profile_picture: true,
+        },
+      },
     },
   });
 };
