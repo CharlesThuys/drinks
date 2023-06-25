@@ -28,7 +28,7 @@ const AuthProvider = ({ children }: { children: ReactElement }) => {
 
   const signUp = async (username: string, password: string): Promise<{ data?: any, error?: string }> => {
     try {
-      const res = await fetcher('auth/register', 'post', '', { name: username, password, profile_picture: '' });
+      const res = await fetcher('auth/register', 'post', { name: username, password, profile_picture: '' });
       if (res.user) { 
         const jsonValue = JSON.stringify(res);
         await AsyncStorage.setItem('user', jsonValue);
@@ -45,7 +45,7 @@ const AuthProvider = ({ children }: { children: ReactElement }) => {
 
   const signIn = async (username: string, password: string) => {
     try {
-      const res = await fetcher('auth/login', 'post', '', { name: username, password });
+      const res = await fetcher('auth/login', 'post', { name: username, password });
       if (res.user) { 
         const jsonValue = JSON.stringify(res);
         await AsyncStorage.setItem('user', jsonValue);

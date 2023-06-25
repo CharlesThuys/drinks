@@ -1,6 +1,5 @@
 import GameCard from '@/components/gameCard';
 import { GameSkeleton } from '@/components/skeleton';
-import { useAuth } from '@/context/authContext';
 import { useHeader } from '@/context/headerContext';
 import { Game } from '@/types/game';
 import { fetcher } from '@/utils/fetcher';
@@ -10,7 +9,6 @@ import { useEffect, useState } from 'react';
 import { FlatList, RefreshControl, View } from 'react-native';
 
 const Games = () => {
-  const { bearerToken } = useAuth();
   const routeObject = useNavigationState((state) => state);
   const { setContent } = useHeader();
   
@@ -42,7 +40,7 @@ const Games = () => {
   useEffect(() => {
     const getAllEvents = async () => {
       try { 
-        const res = await fetcher('games', 'get', bearerToken);
+        const res = await fetcher('games', 'get');
         setGames(res.games);
         setLoading(false);
         setRefreshing(false);

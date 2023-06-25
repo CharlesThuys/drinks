@@ -5,5 +5,6 @@ export type Auth = {
   bearerToken: string | null
   signUp: (username: string, password: string) => Promise<{ data?: any, error?: string }> 
   signIn: (username: string, password: string) => Promise<{ data?: any, error?: string }>
-  logout: () => void
+  logout: () => void,
+  loading: boolean
 };

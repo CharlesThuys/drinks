@@ -2,7 +2,6 @@ import { Layout, Text, Input, Datepicker, InputProps } from '@ui-kitten/componen
 import { Button, View } from 'react-native';
 import { useState } from 'react';
 import { fetcher } from '@/utils/fetcher';
-import { useAuth } from '@/context/authContext';
 import { useNavigation } from '@react-navigation/native';
 
 const useInputState = (initialValue = ''): InputProps => {
@@ -11,8 +10,6 @@ const useInputState = (initialValue = ''): InputProps => {
 };
 
 const AddEvent = () => {
-
-  const { bearerToken } = useAuth();
   const nav = useNavigation();
 
   const [date, setDate] = useState(new Date());
@@ -31,7 +28,7 @@ const AddEvent = () => {
       location: locationInputState.value,
       picture: pictureInputState.value,
     };
-    await fetcher('events', 'post', bearerToken, event);
+    await fetcher('events', 'post', event);
     nav.goBack();
   };
 
