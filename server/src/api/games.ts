@@ -5,6 +5,7 @@ import {
   createGame,
   updateGame,
   deleteGame,
+  likeGame,
 } from '../services/games';
 import { Game, User } from '@prisma/client';
 import { getUserFromHeader } from '../services/users';
@@ -12,7 +13,11 @@ import { getUserFromHeader } from '../services/users';
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-  const games: Game[] = await getAllGames();
+  const user: User | null = await getUserFromHeader(
+    req.headers.authorization as string,
+  );
+
+  const games: Game[] = await getAllGames(user!);
 
   res.json({
     games,
@@ -22,7 +27,10 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const id = req.params.id;
-    const game: Game | null = await getGame(id);
+    const user: User | null = await getUserFromHeader(
+      req.headers.authorization as string,
+    );
+    const game: Game | null = await getGame(id, user!);
     res.json({
       game,
     });
@@ -59,7 +67,7 @@ router.put('/:id', async (req, res) => {
     const user: User | null = await getUserFromHeader(
       req.headers.authorization as string,
     );
-    const gameToUpdate: Game | null = await getGame(id);
+    const gameToUpdate: Game | null = await getGame(id, user!);
     if (user?.id !== gameToUpdate?.userId) {
       res
         .status(401)
@@ -81,10 +89,13 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   try {
     const id = req.params.id;
-    const gameToDelete: Game | null = await getGame(id);
+
     const user: User | null = await getUserFromHeader(
       req.headers.authorization as string,
     );
+
+    const gameToDelete: Game | null = await getGame(id, user!);
+
     if (user?.id !== gameToDelete?.userId) {
       res
         .status(401)
@@ -97,6 +108,26 @@ router.delete('/:id', async (req, res) => {
     }
   } catch (error: any) {
     res.json({
+      message: error.message,
+    });
+  }
+});
+
+router.post('/:id/like', async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const user: User | null = await getUserFromHeader(
+      req.headers.authorization as string,
+    );
+
+    const liked: Boolean = await likeGame(id, user!);
+
+    res.json({
+      liked,
+    });
+  } catch (error: any) {
+    res.status(400).json({
       message: error.message,
     });
   }
