@@ -1,10 +1,10 @@
 export type Game = {
-  id: string;
+  id?: string;
   name: string;
   description: string;
   funFactor: number;
   drinkFactor: number;
-  userId: string;
+  userId?: string;
   materials: string[];
 };
 
