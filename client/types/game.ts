@@ -6,6 +6,7 @@ export type Game = {
   drinkFactor: number;
   userId?: string;
   materials: string[];
+  likes?: any[];
 };
 
 export type GameContextType = {
