@@ -14,6 +14,7 @@ export const AuthContext = createContext<Auth>({
     return { data: '', error: '' };
   },
   logout: () => {},
+  loading: true,
 });
 
 export function useAuth() {
@@ -23,6 +24,7 @@ export function useAuth() {
 const AuthProvider = ({ children }: { children: ReactElement }) => {
   const [user, setUser] = useState<User | null>(null);
   const [bearerToken, setBearerToken] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(true);
 
   const signUp = async (username: string, password: string): Promise<{ data?: any, error?: string }> => {
     try {
@@ -65,13 +67,19 @@ const AuthProvider = ({ children }: { children: ReactElement }) => {
 
   useEffect(() => {
     const getUser = async () => {
+
       try {
         const res = await AsyncStorage.getItem('user');
-        if (!res) return;
-        const resJson = JSON.parse(res);
-        setUser(resJson.user);
-        setBearerToken(resJson.token);
+        if (!res) {
+          setLoading(false);
+        } else {
+          const resJson = JSON.parse(res);
+          setUser(resJson.user);
+          setBearerToken(resJson.token);
+          setLoading(false);
+        }
       } catch (e) {
+        setLoading(false);
       }
     };
     
@@ -86,6 +94,7 @@ const AuthProvider = ({ children }: { children: ReactElement }) => {
         signIn,
         logout,
         bearerToken,
+        loading,
       }}
     >
       {children}
