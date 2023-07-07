@@ -13,11 +13,7 @@ import { getUserFromHeader } from '../services/users';
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-  const user: User | null = await getUserFromHeader(
-    req.headers.authorization as string,
-  );
-
-  const games: Game[] = await getAllGames(user!);
+  const games: Game[] = await getAllGames();
 
   res.json({
     games,
@@ -27,10 +23,8 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const id = req.params.id;
-    const user: User | null = await getUserFromHeader(
-      req.headers.authorization as string,
-    );
-    const game: Game | null = await getGame(id, user!);
+   
+    const game: Game | null = await getGame(id);
     res.json({
       game,
     });
@@ -67,7 +61,7 @@ router.put('/:id', async (req, res) => {
     const user: User | null = await getUserFromHeader(
       req.headers.authorization as string,
     );
-    const gameToUpdate: Game | null = await getGame(id, user!);
+    const gameToUpdate: Game | null = await getGame(id);
     if (user?.id !== gameToUpdate?.userId) {
       res
         .status(401)
@@ -94,7 +88,7 @@ router.delete('/:id', async (req, res) => {
       req.headers.authorization as string,
     );
 
-    const gameToDelete: Game | null = await getGame(id, user!);
+    const gameToDelete: Game | null = await getGame(id);
 
     if (user?.id !== gameToDelete?.userId) {
       res

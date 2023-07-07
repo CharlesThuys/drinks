@@ -1,7 +1,7 @@
 import { prisma } from '../../prisma/prisma';
 import { Game, User } from '@prisma/client';
 
-export const getAllGames = async (user: User): Promise<Game[]> => {
+export const getAllGames = async (): Promise<Game[]> => {
   return prisma.game.findMany({
     include: {
       user: {
@@ -11,18 +11,16 @@ export const getAllGames = async (user: User): Promise<Game[]> => {
         },
       },
       likes: {
-        where: {
-          userId: user.id,
-        },
         select: {
           liked: true,
+          userId: true,
         },
       },
     },
   });
 };
 
-export const getGame = async (id: string, user: User): Promise<Game | null> => {
+export const getGame = async (id: string): Promise<Game | null> => {
   return prisma.game.findUnique({
     where: {
       id,
@@ -35,11 +33,9 @@ export const getGame = async (id: string, user: User): Promise<Game | null> => {
         },
       },
       likes: {
-        where: {
-          userId: user.id,
-        },
         select: {
           liked: true,
+          userId: true,
         },
       },
     },
