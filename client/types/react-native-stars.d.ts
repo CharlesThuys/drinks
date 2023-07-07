@@ -10,6 +10,7 @@ declare module 'react-native-stars' {
     fullStar?: ReactNode;
     emptyStar?: ReactNode;
     halfStar?: ReactNode;
+    disabled?: boolean;
   }
 
   export default function Stars(props: StarsProps): JSX.Element;

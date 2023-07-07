@@ -4,7 +4,6 @@ import { Image, StyleSheet, TouchableOpacity, View, Platform } from 'react-nativ
 import { Ionicons } from '@expo/vector-icons'; 
 import { useNavigation } from '@react-navigation/native';
 import * as Haptics from 'expo-haptics';
-import LikeButton from '@/components/likeButton';
 import { useEffect, useState } from 'react';
 import { checkPictureUrl } from '@/utils';
 
@@ -38,7 +37,6 @@ const Event = () => {
   const { event } = useEvent();
   const navigation = useNavigation();
 
-  const [liked, setLiked] = useState(false);
   const [date, setDate] = useState<Date>();
   const [validImage, setValidImage] = useState(false);
   const [validAvatar, setValidAvatar] = useState<boolean>(false);
@@ -48,12 +46,7 @@ const Event = () => {
     navigation.goBack();
     if (Platform.OS === 'ios') Haptics.selectionAsync();
   };
-
-  const likeEvent = () => {
-    setLiked(!liked);
-    if (Platform.OS === 'ios') Haptics.selectionAsync();
-  };
-
+ 
   useEffect(() => {
     if (event) {
       const dateObject = new Date(event.date);
@@ -104,7 +97,6 @@ const Event = () => {
           <View style={{ ...styles.badge, backgroundColor: theme['color-primary-500'] }}>
             <Text style={styles.text}>15 participants</Text>
           </View>
-          <LikeButton liked={liked} onLike={likeEvent}/>
         </View>
       </View>
 

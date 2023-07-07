@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
 });
 
 
-const LikeButton = ({ liked, onLike }: { liked: boolean, onLike: () => void }) => {
+const LikeButton = ({ liked, onLike, disabled = false }: { liked: boolean, onLike: () => void, disabled: boolean }) => {
   const likedSping = useSharedValue(liked ? 1 : 0);
   
   const outlineStyle = useAnimatedStyle(() => {
@@ -37,7 +37,7 @@ const LikeButton = ({ liked, onLike }: { liked: boolean, onLike: () => void }) =
 
 
   return (
-    <Pressable style={styles.button} onPress={() => {
+    <Pressable style={styles.button} disabled={disabled} onPress={() => {
       likedSping.value = withSpring(likedSping.value ? 0 : 1);
       onLike();
     }}>

@@ -5,7 +5,6 @@ import * as Haptics from 'expo-haptics';
 import { useEvent } from '@/context/eventContext';
 import { useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
-import LikeButton from './likeButton';
 import { checkPictureUrl } from '@/utils';
 
 const styles = StyleSheet.create({
@@ -44,7 +43,6 @@ const EventCard = ({ event }: { event: Event }) => {
   const { setEvent } = useEvent();
   const navigation = useNavigation();
 
-  const [liked, setLiked] = useState<boolean>(false);
   const [validImage, setValidImage] = useState<boolean>(false);
   const [validAvatar, setValidAvatar] = useState<boolean>(false);
 
@@ -63,11 +61,6 @@ const EventCard = ({ event }: { event: Event }) => {
     if (Platform.OS === 'ios') Haptics.selectionAsync();
     setEvent(event);
     navigation.navigate('Event' as never);
-  };
-
-  const likeEvent = () => {
-    setLiked(!liked);
-    if (Platform.OS === 'ios') Haptics.selectionAsync();
   };
 
   useEffect(() => {
@@ -102,7 +95,6 @@ const EventCard = ({ event }: { event: Event }) => {
             <View style={{ ...styles.badge, backgroundColor: theme['color-primary-500'] }}>
               <Text style={styles.text}>15 participants</Text>
             </View>
-            <LikeButton liked={liked} onLike={likeEvent}/>
           </View>
 
           <View style={{ flex: 2 }}>

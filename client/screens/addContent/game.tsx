@@ -123,9 +123,9 @@ const AddGame = () => {
           update={setFunCount}
           spacing={4}
           count={5}
-          fullStar={<FontAwesome name="star" size={26} color="white" />}
-          emptyStar={<FontAwesome name="star-o" size={26} color="white" />}
-          halfStar={<FontAwesome name="star-half-empty" size={26} color="white" />}/>
+          fullStar={<FontAwesome name="star" size={26} color="yellow" />}
+          emptyStar={<FontAwesome name="star-o" size={26} color="yellow" />}
+          halfStar={<FontAwesome name="star-half-empty" size={26} color="yellow" />}/>
         </Layout>
         <Layout style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10, backgroundColor: '#0d0e19', padding: 5 }}>
           <Text category='s1'>Drink factor</Text>
@@ -135,9 +135,9 @@ const AddGame = () => {
           update={setDrinkCount}
           spacing={4}
           count={5}
-          fullStar={<FontAwesome name="star" size={26} color="white" />}
-          emptyStar={<FontAwesome name="star-o" size={26} color="white" />}
-          halfStar={<FontAwesome name="star-half-empty" size={26} color="white" />}/>
+          fullStar={<FontAwesome name="star" size={26} color="yellow" />}
+          emptyStar={<FontAwesome name="star-o" size={26} color="yellow" />}
+          halfStar={<FontAwesome name="star-half-empty" size={26} color="yellow" />}/>
         </Layout>
 
         <List

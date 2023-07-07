@@ -6,10 +6,16 @@ export type Game = {
   drinkFactor: number;
   userId?: string;
   materials: string[];
-  likes?: any[];
+  likes?: UserLikesGame[];
+};
+
+type UserLikesGame = {
+  liked: boolean;
+  userId: string;
 };
 
 export type GameContextType = {
   game: Game | null;
   setGame: (game: Game) => void;
 };
+
