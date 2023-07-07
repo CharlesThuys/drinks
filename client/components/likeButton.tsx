@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
 });
 
 
-const LikeButton = ({ liked, onLike, disabled = false }: { liked: boolean, onLike: () => void, disabled: boolean }) => {
+const LikeButton = ({ liked, onLike, disabled = false }: { liked: boolean, onLike: () => void, disabled?: boolean }) => {
   const likedSping = useSharedValue(liked ? 1 : 0);
   
   const outlineStyle = useAnimatedStyle(() => {
