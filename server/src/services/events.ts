@@ -16,6 +16,22 @@ export const getAllEvents = async (): Promise<Event[]> => {
   );
 };
 
+export const getUserEvents = async (userId: string): Promise<Event[]> => {
+  return prisma.event.findMany({
+    where: {
+      userId,
+    },
+    include: {
+      user: {
+        select: {
+          name: true,
+          profile_picture: true,
+        },
+      },
+    },
+  });
+};
+
 export const getEvent = async (id: string): Promise<Event | null> => {
   return prisma.event.findUnique({
     where: {
