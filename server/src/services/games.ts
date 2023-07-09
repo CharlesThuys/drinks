@@ -20,6 +20,28 @@ export const getAllGames = async (): Promise<Game[]> => {
   });
 };
 
+export const getUserGames = async (userId: string): Promise<Game[]> => {
+  return prisma.game.findMany({
+    where: {
+      userId,
+    },
+    include: {
+      user: {
+        select: {
+          name: true,
+          profile_picture: true,
+        },
+      },
+      likes: {
+        select: {
+          liked: true,
+          userId: true,
+        },
+      },
+    },
+  });
+};
+
 export const getGame = async (id: string): Promise<Game | null> => {
   return prisma.game.findUnique({
     where: {

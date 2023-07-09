@@ -6,6 +6,7 @@ import {
   updateGame,
   deleteGame,
   likeGame,
+  getUserGames,
 } from '../services/games';
 import { Game, User } from '@prisma/client';
 import { getUserFromHeader } from '../services/users';
@@ -18,6 +19,29 @@ router.get('/', async (req, res) => {
   res.json({
     games,
   });
+});
+
+router.get('/user', async (req, res) => {
+  try {
+    const user: User | null = await getUserFromHeader(
+      req.headers.authorization as string,
+    );
+    if (!user) {
+      return res
+        .status(401)
+        .json({ message: 'You are not authorized' });
+    }
+
+    const games: Game[] = await getUserGames(user.id);
+
+    res.json({
+      games,
+    });
+  } catch (error: any) {
+    res.json({
+      message: error.message,
+    });
+  }
 });
 
 router.get('/:id', async (req, res) => {
