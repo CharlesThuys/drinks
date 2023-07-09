@@ -160,7 +160,7 @@ const Profile = () => {
         {
           selectedIndex === 0 ? (
             <>
-              <Text category='h5' style={{ marginLeft: 15 }}>Your events</Text>
+              <Text category='h5' style={{ marginLeft: 15 }}>{events && events?.length > 0 ? 'Your events' : "You don't have any events"}</Text>
               <FlatList
               data={events}
               renderItem={({ item }) => (
@@ -177,7 +177,7 @@ const Profile = () => {
           ) :
             (
             <>
-              <Text category='h5' style={{ marginLeft: 15 }}>Your games</Text>
+              <Text category='h5' style={{ marginLeft: 15 }}>{games && games?.length > 0 ? 'Your games' : "You don't have any games"}</Text>
               <FlatList
               data={games}
               renderItem={({ item }) => (
