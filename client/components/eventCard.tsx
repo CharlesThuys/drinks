@@ -6,6 +6,7 @@ import { useEvent } from '@/context/eventContext';
 import { useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
 import { checkPictureUrl } from '@/utils';
+import { useAuth } from '@/context/authContext';
 
 const styles = StyleSheet.create({
   card: {
@@ -38,10 +39,11 @@ const styles = StyleSheet.create({
 
 const DEFAULT_BACKGROUND = 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.aiysxhOBd9_RKdfjJ9wQYAHaEK%26pid%3DApi&f=1&ipt=c95fc3b5ad0164124cfc48ec7d41aaedc70baf99afe36900f9847781f3db11f7&ipo=images';
 
-const EventCard = ({ event }: { event: Event }) => {
+const EventCard = ({ event, callBackLongPress }: { event: Event, callBackLongPress?: () => void }) => {
   const theme = useTheme();
   const { setEvent } = useEvent();
   const navigation = useNavigation();
+  const { user } = useAuth();
 
   const [validImage, setValidImage] = useState<boolean>(false);
   const [validAvatar, setValidAvatar] = useState<boolean>(false);
@@ -83,10 +85,17 @@ const EventCard = ({ event }: { event: Event }) => {
       });
   }, [event]);
 
+  const showActions = () => {
+    if (event.userId !== user?.id) return;
+    if (Platform.OS === 'ios') Haptics.selectionAsync();
+    callBackLongPress?.();
+  };
+
   return (
     <Card
       style={styles.card}
       onPress={openEvent}
+      onLongPress={showActions}
     >
       <ImageBackground source={{ uri: validImage ? event.picture : DEFAULT_BACKGROUND }} resizeMode="cover" style={styles.image}>
         <Layout style={{ ...styles.overlay }}>

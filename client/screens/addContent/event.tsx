@@ -1,8 +1,10 @@
-import { Layout, Text, Input, Datepicker, InputProps } from '@ui-kitten/components';
-import { Button, View } from 'react-native';
+import { Layout, Text, Input, Datepicker, InputProps, useTheme } from '@ui-kitten/components';
+import { Button, Platform, TouchableOpacity, View } from 'react-native';
 import { useState } from 'react';
 import { fetcher } from '@/utils/fetcher';
 import { useNavigation } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
+import * as Haptics from 'expo-haptics';
 
 const useInputState = (initialValue = ''): InputProps => {
   const [value, setValue] = useState(initialValue);
@@ -10,7 +12,8 @@ const useInputState = (initialValue = ''): InputProps => {
 };
 
 const AddEvent = () => {
-  const nav = useNavigation();
+  const navigation = useNavigation();
+  const theme = useTheme();
 
   const [date, setDate] = useState(new Date());
   const nameInputState = useInputState();
@@ -29,13 +32,28 @@ const AddEvent = () => {
       picture: pictureInputState.value,
     };
     await fetcher('events', 'post', event);
-    nav.goBack();
+    navigation.navigate('Events' as never);
+  };
+
+  const navigateBack = () => {
+    navigation.goBack();
+    if (Platform.OS === 'ios') Haptics.selectionAsync();
   };
 
   return (
     <Layout style={{ height: '100%', width: '100%', display: 'flex', flexDirection: 'column', backgroundColor: '#0d0e19' }}>
       <View style={{ padding: 15, display: 'flex', flexDirection: 'column', gap: 10 }}>
-        <Text category='h5'>Event</Text>
+
+        <View style={{ flexDirection: 'row', alignItems: 'center', 'marginBottom': 10 }}>
+          <TouchableOpacity onPress={navigateBack}>
+            <Ionicons name="chevron-back" size={32} color={theme['color-primary-500']} onPress={navigateBack}/>
+          </TouchableOpacity>
+
+          <View style={{ flex: 1, alignItems: 'center' }}>
+            <Text category='h5'>Add event</Text>
+          </View>
+        </View>
+
         <Input placeholder='Name' {...nameInputState} />
         <Input placeholder='Description' {...descriptionInputState} />
         <Input placeholder='Location' {...locationInputState} />

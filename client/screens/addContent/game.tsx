@@ -1,5 +1,5 @@
-import { Layout, Text, Input, InputProps, List, ListItem } from '@ui-kitten/components';
-import { Button, View } from 'react-native';
+import { Layout, Text, Input, InputProps, List, ListItem, useTheme } from '@ui-kitten/components';
+import { Button, Platform, TouchableOpacity, View } from 'react-native';
 import { useRef, useState } from 'react';
 import { fetcher } from '@/utils/fetcher';
 import { useNavigation } from '@react-navigation/native';
@@ -7,6 +7,7 @@ import { Game } from '@/types/game';
 import { FontAwesome } from '@expo/vector-icons'; 
 import Stars from 'react-native-stars';
 import { Ionicons } from '@expo/vector-icons'; 
+import * as Haptics from 'expo-haptics';
 
 const useInputState = (initialValue = ''): InputProps => {
   const [value, setValue] = useState(initialValue);
@@ -24,9 +25,10 @@ type MaterialList = {
 };
 
 const AddGame = () => {
-  const nav = useNavigation();
   const scrollViewRef = useRef<any>();
-
+  const navigation = useNavigation();
+  const theme = useTheme();
+  
   const nameInputState = useInputState();
   const descriptionInputState = useInputState();
   const [funCount, setFunCount] = useState<number>(1);
@@ -79,7 +81,7 @@ const AddGame = () => {
     };
 
     await fetcher('games', 'post', game);
-    nav.goBack();
+    navigation.navigate('Games' as never);
   };
 
   const renderMaterial = ({ item, index }: { item: { title: string }; index: number }) => {
@@ -103,11 +105,25 @@ const AddGame = () => {
     );
   };
 
+  const navigateBack = () => {
+    navigation.goBack();
+    if (Platform.OS === 'ios') Haptics.selectionAsync();
+  };
 
   return (
     <Layout style={{ height: '100%', width: '100%', display: 'flex', flexDirection: 'column', backgroundColor: '#0d0e19' }}>
       <View style={{ padding: 15, display: 'flex', flexDirection: 'column', gap: 10 }}>
-        <Text category='h5'>Game</Text>
+        
+        <View style={{ flexDirection: 'row', alignItems: 'center', 'marginBottom': 10 }}>
+          <TouchableOpacity onPress={navigateBack}>
+            <Ionicons name="chevron-back" size={32} color={theme['color-primary-500']} onPress={navigateBack}/>
+          </TouchableOpacity>
+
+          <View style={{ flex: 1, alignItems: 'center' }}>
+            <Text category='h5'>Add game</Text>
+          </View>
+        </View>
+
         <Layout style={{ backgroundColor: '#0d0e19' }}>
         { errors.name && <Text style={{ color: 'red' }}>{errors.name}</Text> }
         { errors.description && <Text style={{ color: 'red' }}>{errors.description}</Text> }

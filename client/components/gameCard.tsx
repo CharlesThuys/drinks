@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const GameCard = ({ game } : { game :Game }) => {
+const GameCard = ({ game, callBackLongPress } : { game : Game, callBackLongPress?: () => void }) => {
   const { user } = useAuth();
   const { setGame } = useGame();
   const navigation = useNavigation();
@@ -34,6 +34,7 @@ const GameCard = ({ game } : { game :Game }) => {
   });
   const [likes, setLikes] = useState<number>(game.likes?.length || 0);
   const [liking, setLiking] = useState<boolean>(false);
+
   
   const openGame = () => {
     if (Platform.OS === 'ios') Haptics.selectionAsync();
@@ -52,16 +53,18 @@ const GameCard = ({ game } : { game :Game }) => {
     await fetcher(`games/${game.id}/like`, 'post');
     setLiking(false);
   };
+
+  const showActions = () => {
+    if (game.userId !== user?.id) return;
+    if (Platform.OS === 'ios') Haptics.selectionAsync();
+    callBackLongPress?.();
+  };
   
   return (
-    <Card style={styles.card} onPress={openGame}>
-      <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', width: '100%', gap: 5 }}>
-        <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+    <Card style={styles.card} onPress={openGame} onLongPress={showActions}>
+      <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 5 }}>
+        <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
           <Text category='h5' style={{ fontWeight: '200' }}>{game.name}</Text>
-          <View style={{ display: 'flex', flexDirection: 'row', gap: 8, alignItems: 'center' }}>
-            <Text category='h6' style={{ fontWeight: '200' }}>{likes}</Text>
-            <LikeButton liked={liked} onLike={likeEvent} disabled={liking}/>
-          </View>
         </View>
         <View style={{ gap: 10 }}>
           <View style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'center' }}>
@@ -76,18 +79,24 @@ const GameCard = ({ game } : { game :Game }) => {
             emptyStar={<FontAwesome name="star-o" size={26} color="yellow" />}
             halfStar={<FontAwesome name="star-half-empty" size={26} color="yellow" />}/>
           </View>
-          <View style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'center' }}>
-            <MaterialIcons name="local-drink" size={18} color="white" />
-            <Stars
-            half={false}
-            default={game.drinkFactor}
-            spacing={4}
-            count={5}
-            disabled={true}
-            fullStar={<FontAwesome name="star" size={26} color="yellow" />}
-            emptyStar={<FontAwesome name="star-o" size={26} color="yellow" />}
-            halfStar={<FontAwesome name="star-half-empty" size={26} color="yellow" />}/>
-          </View>
+          <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+            <View style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'center' }}>
+              <MaterialIcons name="local-drink" size={18} color="white" />
+              <Stars
+              half={false}
+              default={game.drinkFactor}
+              spacing={4}
+              count={5}
+              disabled={true}
+              fullStar={<FontAwesome name="star" size={26} color="yellow" />}
+              emptyStar={<FontAwesome name="star-o" size={26} color="yellow" />}
+              halfStar={<FontAwesome name="star-half-empty" size={26} color="yellow" />}/>
+            </View>
+            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+              <Text category='h6' style={{ fontWeight: '200' }}>{likes}</Text>
+              <LikeButton liked={liked} onLike={likeEvent} disabled={liking}/>
+            </View>
+            </View>
         </View>
       </View>
     </Card>
