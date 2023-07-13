@@ -20,6 +20,7 @@ export type GameContextType = {
   games: Game[] | null;
   setGames: (games: Game[] | null) => void;
   getAllGames: () => Promise<void>;
-  loading: boolean;
+  loadingGames: boolean;
+  setLoadingGames: (loading: boolean) => void;
 };
 

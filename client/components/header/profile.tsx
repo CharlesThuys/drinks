@@ -5,6 +5,8 @@ import * as Haptics from 'expo-haptics';
 import { StyleSheet, Platform } from 'react-native';
 import { useAuth } from '@/context/authContext';
 import { checkPictureUrl } from '@/utils';
+import { useGame } from '@/context/gameContext';
+import { useEvent } from '@/context/eventContext';
 
 const DEFAULT_BACKGROUND = 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.aiysxhOBd9_RKdfjJ9wQYAHaEK%26pid%3DApi&f=1&ipt=c95fc3b5ad0164124cfc48ec7d41aaedc70baf99afe36900f9847781f3db11f7&ipo=images';
 
@@ -33,6 +35,8 @@ const styles = StyleSheet.create({
 });
 
 const Profile = () => {
+  const { setGames, setLoadingGames } = useGame();
+  const { setEvents, setAttendingEvents, setLoadingAttendingEvents, setLoadingEvents } = useEvent();
   const { logout, user } = useAuth();
   const navigation = useNavigation();
   
@@ -52,6 +56,14 @@ const Profile = () => {
   
   const logoutUser = () => {
     if (Platform.OS === 'ios') Haptics.selectionAsync();
+    setGames(null);
+    setEvents(null);
+    setAttendingEvents(null);
+
+    setLoadingGames(true);
+    setLoadingEvents(true);
+    setLoadingAttendingEvents(true);
+
     logout();
   };
 

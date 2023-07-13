@@ -7,8 +7,10 @@ const initialEventContextState: EventContextType = {
   setEvent: () => {},
   events: null,
   setEvents: () => {},
-  loading: true,
-  loadingAttending: true,
+  loadingEvents: true,
+  loadingAttendingEvents: true,
+  setLoadingEvents: () => {},
+  setLoadingAttendingEvents: () => {},
   getAllEvents: async () => {},
   getAttendingEvents: async () => {},
   attendingEvents: null,
@@ -25,31 +27,29 @@ const EventProvider = ({ children }: { children: ReactElement }) => {
   const [event, setEvent] = useState<Event | null>(null);
   const [events, setEvents] = useState<Event[] | null>(null);
   const [attendingEvents, setAttendingEvents] = useState<Event[] | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [loadingAttending, setLoadingAttending] = useState(true);
+  const [loadingEvents, setLoadingEvents] = useState(true);
+  const [loadingAttendingEvents, setLoadingAttendingEvents] = useState(true);
 
 
   const getAllEvents = async () => {
     try { 
-      setEvents(null);
       const res = await fetcher('events', 'get');
       setEvents(res.events);
-      setLoading(false);
+      setLoadingEvents(false);
     } catch (err) {
       console.log(err);
-      setLoading(false);
+      setLoadingEvents(false);
     }
   };
 
   const getAttendingEvents = async () => {
     try {
-      setAttendingEvents(null);
       const res = await fetcher('events/attending', 'get');
       setAttendingEvents(res.events);
-      setLoadingAttending(false);
+      setLoadingAttendingEvents(false);
     } catch (err) {
       console.log(err);
-      setLoadingAttending(false);
+      setLoadingAttendingEvents(false);
     }
   };
 
@@ -61,8 +61,10 @@ const EventProvider = ({ children }: { children: ReactElement }) => {
         events,
         setEvents,
         getAllEvents,
-        loading,
-        loadingAttending,
+        loadingEvents,
+        loadingAttendingEvents,
+        setLoadingEvents,
+        setLoadingAttendingEvents,
         getAttendingEvents,
         attendingEvents,
         setAttendingEvents,

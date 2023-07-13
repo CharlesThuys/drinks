@@ -24,8 +24,10 @@ export type EventContextType = {
   events: Event[] | null;
   setEvents: (events: Event[] | null) => void;
   getAllEvents: () => Promise<void>;
-  loading: boolean;
-  loadingAttending: boolean;  
+  loadingEvents: boolean;
+  loadingAttendingEvents: boolean;  
+  setLoadingEvents: (loading: boolean) => void;
+  setLoadingAttendingEvents: (loading: boolean) => void;
   getAttendingEvents: () => Promise<void>;
   attendingEvents: Event[] | null;
   setAttendingEvents: (events: Event[] | null) => void;

@@ -7,7 +7,8 @@ const initialEventContextState: GameContextType = {
   setGame: () => {},
   games: null,
   setGames: () => {},
-  loading: true,
+  loadingGames: true,
+  setLoadingGames: () => {},
   getAllGames: async () => {},
 };
 
@@ -20,17 +21,16 @@ export function useGame() {
 const GameProvider = ({ children }: { children: ReactElement }) => {
   const [game, setGame] = useState<Game | null>(null);
   const [games, setGames] = useState<Game[] | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loadingGames, setLoadingGames] = useState(true);
 
   const getAllGames = async () => {
     try { 
-      setGames(null);
       const res = await fetcher('games', 'get');
       setGames(res.games);
-      setLoading(false);
+      setLoadingGames(false);
     } catch (err) {
       console.log(err);
-      setLoading(false);
+      setLoadingGames(false);
     }
   };
 
@@ -42,7 +42,8 @@ const GameProvider = ({ children }: { children: ReactElement }) => {
         getAllGames,
         games,
         setGames,
-        loading,
+        loadingGames,
+        setLoadingGames,
       }}
     >
       {children}

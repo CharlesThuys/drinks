@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 import { FlatList, RefreshControl, View } from 'react-native';
 
 const Games = () => {
-  const { games, getAllGames, setGames, loading } = useGame();
+  const { games, getAllGames, setGames, loadingGames } = useGame();
   const routeObject = useNavigationState((state) => state);
   const { setContent } = useHeader();
   
@@ -48,7 +48,7 @@ const Games = () => {
 
   return (
     <Layout style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', backgroundColor: '#0d0e19' }}>
-       {loading && 
+       {loadingGames && 
         <FlatList
         data={[0, 1, 2]}
         renderItem={() => (

@@ -11,7 +11,7 @@ import { useEvent } from '@/context/eventContext';
 const Home = () => {
   const { setContent } = useHeader();
   const routeObject = useNavigationState((state) => state);
-  const { setEvents, events, getAllEvents, loading } = useEvent();
+  const { setEvents, events, getAllEvents, loadingEvents } = useEvent();
 
   const [refreshing, setRefreshing] = useState(false);
 
@@ -48,7 +48,7 @@ const Home = () => {
 
   return (
     <Layout style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', backgroundColor: '#0d0e19' }}>
-      {loading && 
+      {loadingEvents && 
         <FlatList
         data={[0, 1, 2]}
         renderItem={() => (

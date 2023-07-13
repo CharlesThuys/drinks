@@ -10,7 +10,7 @@ import { useEvent } from '@/context/eventContext';
 const Events = () => {
   const { setContent } = useHeader();
   const routeObject = useNavigationState((state) => state);
-  const { setAttendingEvents, attendingEvents, getAttendingEvents, loadingAttending } = useEvent();
+  const { setAttendingEvents, attendingEvents, getAttendingEvents, loadingAttendingEvents } = useEvent();
 
   const [refreshing, setRefreshing] = useState(false);
 
@@ -47,7 +47,7 @@ const Events = () => {
 
   return (
     <Layout style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', backgroundColor: '#0d0e19' }}>
-      {loadingAttending && 
+      {loadingAttendingEvents && 
         <FlatList
         data={[0, 1, 2]}
         renderItem={() => (
