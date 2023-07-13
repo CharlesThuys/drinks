@@ -1,19 +1,17 @@
 import GameCard from '@/components/gameCard';
 import { GameSkeleton } from '@/components/skeleton';
+import { useGame } from '@/context/gameContext';
 import { useHeader } from '@/context/headerContext';
-import { Game } from '@/types/game';
-import { fetcher } from '@/utils/fetcher';
 import { useNavigationState } from '@react-navigation/native';
 import { Layout, Text } from '@ui-kitten/components';
 import { useEffect, useState } from 'react';
 import { FlatList, RefreshControl, View } from 'react-native';
 
 const Games = () => {
+  const { games, getAllGames, setGames, loading } = useGame();
   const routeObject = useNavigationState((state) => state);
   const { setContent } = useHeader();
   
-  const [games, setGames] = useState<Game[] | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
   const [refreshing, setRefreshing] = useState(false);
 
 
@@ -38,20 +36,10 @@ const Games = () => {
   };
 
   useEffect(() => {
-    const getAllEvents = async () => {
-      try { 
-        const res = await fetcher('games', 'get');
-        setGames(res.games);
-        setLoading(false);
+    getAllGames()
+      .then(() => {
         setRefreshing(false);
-      } catch (err) {
-        console.log(err);
-        setLoading(false);
-        setRefreshing(false);
-      }
-    };
-
-    getAllEvents();
+      });
   }, [refreshing]);
 
   useEffect(() => {
@@ -75,7 +63,8 @@ const Games = () => {
             game={item}
           />
         )}
-        keyExtractor={(item) => item.id}refreshControl={
+        keyExtractor={(item) => item.id}
+        refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor='white'/>
         }
       />

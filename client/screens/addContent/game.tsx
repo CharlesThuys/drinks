@@ -3,7 +3,6 @@ import { Button, Platform, TouchableOpacity, View } from 'react-native';
 import { useRef, useState } from 'react';
 import { fetcher } from '@/utils/fetcher';
 import { useNavigation } from '@react-navigation/native';
-import { Game } from '@/types/game';
 import { FontAwesome } from '@expo/vector-icons'; 
 import Stars from 'react-native-stars';
 import { Ionicons } from '@expo/vector-icons'; 
@@ -72,7 +71,7 @@ const AddGame = () => {
     }
 
 
-    const game: Game = {
+    const game = {
       name: nameInputState.value,
       description: descriptionInputState.value,
       funFactor: funCount,

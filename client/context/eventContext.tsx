@@ -31,6 +31,7 @@ const EventProvider = ({ children }: { children: ReactElement }) => {
 
   const getAllEvents = async () => {
     try { 
+      setEvents(null);
       const res = await fetcher('events', 'get');
       setEvents(res.events);
       setLoading(false);
@@ -42,6 +43,7 @@ const EventProvider = ({ children }: { children: ReactElement }) => {
 
   const getAttendingEvents = async () => {
     try {
+      setAttendingEvents(null);
       const res = await fetcher('events/attending', 'get');
       setAttendingEvents(res.events);
       setLoadingAttending(false);
