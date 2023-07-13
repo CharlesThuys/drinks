@@ -11,6 +11,7 @@ export const getAllEvents = async (): Promise<Event[]> => {
             profile_picture: true,
           },
         },
+        Invitations: true,
       },
     },
   );
