@@ -28,6 +28,7 @@ export const getUserEvents = async (userId: string): Promise<Event[]> => {
           profile_picture: true,
         },
       },
+      Invitations: true,
     },
   });
 };
