@@ -34,6 +34,28 @@ export const getUserEvents = async (userId: string): Promise<Event[]> => {
   });
 };
 
+export const getAttendingEvents = async (userId: string): Promise<Event[]> => {
+  return prisma.event.findMany({
+    where: {
+      Invitations: {
+        some: {
+          userId,
+          accepted: true,
+        },
+      },
+    },
+    include: {
+      user: {
+        select: {
+          name: true,
+          profile_picture: true,
+        },
+      },
+      Invitations: true,
+    },
+  });
+};
+
 export const getEvent = async (id: string): Promise<Event | null> => {
   return prisma.event.findUnique({
     where: {

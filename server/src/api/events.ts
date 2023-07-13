@@ -7,6 +7,7 @@ import {
   deleteEvent,
   getUserEvents,
   acceptPublicEvent,
+  getAttendingEvents,
 } from '../services/events';
 import { Event, Invitation, User } from '@prisma/client';
 import { getUserFromHeader } from '../services/users';
@@ -32,6 +33,23 @@ router.get('/user', async (req, res) => {
   }
 
   const events: Event[] = await getUserEvents(user.id);
+
+  res.json({
+    events,
+  });
+});
+
+router.get('/attending', async (req, res) => {
+  const user: User | null = await getUserFromHeader(
+    req.headers.authorization as string,
+  );
+  if (!user) {
+    return res
+      .status(401)
+      .json({ message: 'You are not authorized' });
+  }
+
+  const events: Event[] = await getAttendingEvents(user.id);
 
   res.json({
     events,
