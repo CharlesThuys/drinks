@@ -135,12 +135,12 @@ const Profile = () => {
 
       <View style={{ display: 'flex', flexDirection: 'row',  justifyContent: 'space-around', gap: 10, borderWidth: 1, borderColor: 'gray', borderRadius: 8, paddingVertical: 10, marginBottom: 15, marginHorizontal: 15 }}>
         <View style={styles.textInfo}>
-          <Text>{events?.length}</Text>
+          <Text>{events?.length || 0}</Text>
           <Text style={styles.textGray}>Events</Text>
         </View>
 
         <View style={styles.textInfo}>
-          <Text>{games?.length}</Text>
+          <Text>{games?.length || 0}</Text>
           <Text style={styles.textGray}>Games</Text>
         </View>
       </View>

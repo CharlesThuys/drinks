@@ -1,5 +1,12 @@
 import { User } from './user';
 
+type Invitation = {
+  id: string;
+  eventId: string;
+  userId: string;
+  accepted: boolean;
+};
+
 export type Event = {
   id: string;
   name: string;
@@ -8,9 +15,18 @@ export type Event = {
   user: User
   date: Date;
   userId: string;
+  Invitations: Invitation[];
 };
 
 export type EventContextType = {
   event: Event | null;
-  setEvent: (event: Event) => void;
+  setEvent: (event: Event | null) => void;
+  events: Event[] | null;
+  setEvents: (events: Event[] | null) => void;
+  getAllEvents: () => Promise<void>;
+  loading: boolean;
+  loadingAttending: boolean;  
+  getAttendingEvents: () => Promise<void>;
+  attendingEvents: Event[] | null;
+  setAttendingEvents: (events: Event[] | null) => void;
 };

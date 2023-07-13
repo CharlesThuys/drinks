@@ -1,22 +1,19 @@
 import { Layout, Text } from '@ui-kitten/components';
-import { fetcher } from '@/utils/fetcher';
 import { useState, useEffect } from 'react';
-import { Event } from '@/types/event';
 import EventCard from '@/components/eventCard';
 import { FlatList, RefreshControl, View } from 'react-native';
 import { EventSkeleton } from '@/components/skeleton';
 import { useHeader } from '@/context/headerContext';
 import { useNavigationState } from '@react-navigation/native';
+import { useEvent } from '@/context/eventContext';
 
 
 const Home = () => {
   const { setContent } = useHeader();
   const routeObject = useNavigationState((state) => state);
+  const { setEvents, events, getAllEvents, loading } = useEvent();
 
-  const [events, setEvents] = useState<Event[] | null >();
-  const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-
 
   const refresh = () => {
     setRefreshing(true);
@@ -39,20 +36,10 @@ const Home = () => {
   };
 
   useEffect(() => {
-    const getAllUsers = async () => {
-      try { 
-        const res = await fetcher('events', 'get');
-        setEvents(res.events);
-        setLoading(false);
+    getAllEvents()
+      .then(() => {
         setRefreshing(false);
-      } catch (err) {
-        console.log(err);
-        setLoading(false);
-        setRefreshing(false);
-      }
-    };
-
-    getAllUsers();
+      });
   }, [refreshing]);
 
   useEffect(() => {

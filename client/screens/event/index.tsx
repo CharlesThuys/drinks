@@ -1,11 +1,13 @@
 import { useEvent } from '@/context/eventContext';
-import { Avatar, Layout, Text, useTheme } from '@ui-kitten/components';
+import { Avatar, Button, Layout, Text, useTheme } from '@ui-kitten/components';
 import { Image, StyleSheet, TouchableOpacity, View, Platform } from 'react-native';
-import { Ionicons } from '@expo/vector-icons'; 
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'; 
 import { useNavigation } from '@react-navigation/native';
 import * as Haptics from 'expo-haptics';
 import { useEffect, useState } from 'react';
 import { checkPictureUrl } from '@/utils';
+import { useAuth } from '@/context/authContext';
+import { fetcher } from '@/utils/fetcher';
 
 const styles = StyleSheet.create({
   image: {
@@ -13,9 +15,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   badge: {
-    paddingHorizontal: 8,
-    paddingVertical: 9,
-    borderRadius: 12,
+    paddingHorizontal: 18,
+    paddingVertical: 5,
+    borderRadius: 8,
+    borderColor: 'transparent',
   },
   text: {
     color: 'white',
@@ -32,23 +35,37 @@ const styles = StyleSheet.create({
 const DEFAULT_BACKGROUND = 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.aiysxhOBd9_RKdfjJ9wQYAHaEK%26pid%3DApi&f=1&ipt=c95fc3b5ad0164124cfc48ec7d41aaedc70baf99afe36900f9847781f3db11f7&ipo=images';
 
 
-const Event = () => {
+const Event = ({}) => {
   const theme = useTheme();
-  const { event } = useEvent();
+  const { event, setEvent, getAllEvents, getAttendingEvents } = useEvent();
+  const { user } = useAuth();
   const navigation = useNavigation();
 
   const [date, setDate] = useState<Date>();
   const [validImage, setValidImage] = useState(false);
   const [validAvatar, setValidAvatar] = useState<boolean>(false);
-
+  const [isGoing, setIsGoing] = useState<boolean>(event?.Invitations.some(invitation => invitation.userId === user?.id) || false);
   
   const navigateBack = () => {
+    setEvent(null);
+
     navigation.goBack();
     if (Platform.OS === 'ios') Haptics.selectionAsync();
+  };
+
+  const handleGoing = () => {
+    if (Platform.OS === 'ios') Haptics.selectionAsync();
+    setIsGoing(!isGoing);
+    fetcher(`events/${event?.id}/invitation`, 'post').then(() => {
+      getAllEvents();
+      getAttendingEvents();
+    });
+   
   };
  
   useEffect(() => {
     if (event) {
+      setIsGoing(event?.Invitations.some(invitation => invitation.userId === user?.id) || false);
       const dateObject = new Date(event.date);
       setDate(dateObject);
 
@@ -94,9 +111,19 @@ const Event = () => {
 
       <View style={{ marginTop: -37 }}>
         <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginLeft: 20, marginRight: 20, marginTop: 15 }}>
-          <View style={{ ...styles.badge, backgroundColor: theme['color-primary-500'] }}>
-            <Text style={styles.text}>15 participants</Text>
-          </View>
+          <Button onPress={handleGoing} style={{ ...styles.badge, backgroundColor: isGoing ? 'rgba(11, 24, 117, 0.9)' : theme['color-primary-500'] }} children={() => {
+            return (
+              <View style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'center', justifyContent: 'center' }}>
+                {isGoing ? 
+                  <Ionicons name="checkmark-circle-outline" size={24} color={isGoing ? theme['color-primary-300'] : 'white'} />
+                  : 
+                  <MaterialCommunityIcons name="calendar-question" size={24} color="white" />
+                }
+                <Text style={{ ...styles.text, color: isGoing ? theme['color-primary-300'] : 'white' }}>Goes</Text>
+              </View>
+            );
+          }}/>
+            
         </View>
       </View>
 
