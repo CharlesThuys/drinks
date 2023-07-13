@@ -44,6 +44,7 @@ export const getEvent = async (id: string): Promise<Event | null> => {
           profile_picture: true,
         },
       },
+      Invitations: true,
     },
   });
 };
@@ -69,4 +70,34 @@ export const deleteEvent = async (id: string): Promise<Event> => {
       id,
     },
   });
+};
+
+export const acceptPublicEvent = async (userId: string, givenEventId: string): Promise<Boolean> => {
+
+  const invitation = await prisma.invitation.findFirst({
+    where: {
+      eventId: givenEventId,
+      userId,
+    },
+  });
+  
+  if (!invitation) {
+    await prisma.invitation.create({
+      data: {
+        userId,
+        eventId: givenEventId,
+        accepted: true,
+      },
+    });
+    return true;
+  } else {
+    await prisma.invitation.delete({
+      where: {
+        id: invitation.id,
+      },
+    });
+
+    return false;
+  }
+ 
 };

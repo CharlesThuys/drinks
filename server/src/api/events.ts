@@ -6,8 +6,9 @@ import {
   updateEvent,
   deleteEvent,
   getUserEvents,
+  acceptPublicEvent,
 } from '../services/events';
-import { Event, User } from '@prisma/client';
+import { Event, Invitation, User } from '@prisma/client';
 import { getUserFromHeader } from '../services/users';
 
 const router = express.Router();
@@ -114,6 +115,42 @@ router.delete('/:id', async (req, res) => {
         deletedEvent,
       });
     }
+  } catch (error: any) {
+    res.json({
+      message: error.message,
+    });
+  }
+});
+
+router.post('/:id/invitation', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const event: any = await getEvent(id);
+
+    const user: User | null = await getUserFromHeader(
+      req.headers.authorization as string,
+    );
+    
+    if (!user) {
+      return res
+        .status(401)
+        .json({ message: 'You are not authorized' });
+    }
+  
+    const invitations: Invitation[] = event.Invitations;
+    const invited = invitations.some((invitation) => invitation.userId === user.id);
+
+    if (!event?.pulic && !invited) { 
+      return res.json({
+        message: 'You are not invited to this event',
+      });
+    }
+
+    const updatedEvent: Boolean = await acceptPublicEvent(user.id, id);
+
+    res.json({
+      updatedEvent,
+    });
   } catch (error: any) {
     res.json({
       message: error.message,
